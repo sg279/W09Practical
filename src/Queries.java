@@ -1,4 +1,5 @@
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -68,19 +69,30 @@ public class Queries {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(url.openStream());
             NodeList info = doc.getElementsByTagName("info");
-
             for(int i = 0; i<info.getLength(); i++){
                 NodeList children = info.item(i).getChildNodes();
-                URL authorURL = new URL(info.item(i).getChildNodes().item(1).getTextContent()+".xml");
+                String name="";
+                String publications;
+                String coauthors;
+                String authorURLString="";
+                for(int j = 0; j<children.getLength(); j++){
+                    if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("author")){
+                        name=children.item(j).getTextContent();
+                    }
+                    if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("url")){
+                        authorURLString=children.item(j).getTextContent();
+                    }
+                }
+                URL authorURL = new URL(authorURLString+".xml");
                 DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db1 = dbf1.newDocumentBuilder();
                 Document doc1 = db1.parse(authorURL.openStream());
                 NodeList coauthorsNodes = doc1.getElementsByTagName("co");
                 NodeList publicationsNodes = doc1.getElementsByTagName("r");
 
-                String name = info.item(i).getChildNodes().item(0).getTextContent();
-                String publications = Integer.toString(publicationsNodes.getLength());
-                String coauthors = Integer.toString(coauthorsNodes.getLength());
+                //name = info.item(i).getChildNodes().item(0).getTextContent();
+                publications = Integer.toString(publicationsNodes.getLength());
+                coauthors = Integer.toString(coauthorsNodes.getLength());
 
                 System.out.println(name+" "+publications+" publications, "+coauthors+" coauthors");
             }

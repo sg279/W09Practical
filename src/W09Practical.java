@@ -9,6 +9,7 @@ public class W09Practical {
         //query.venueSearch("international school");
         //query.publicationSearch("computers");
         query.authorSearch("John");
+
     }
 
 
