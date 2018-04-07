@@ -22,24 +22,34 @@ public class W09Practical {
                 search=args[i+1];
             }
             if (args[i].equals("--query")){
-                queryTerm=args[i+1];
+                queryTerm = args[i+1];
+                int j=i+1;
+                while (j<args.length-1&&args[j]!="--search"&&args[j]!="--cache"){
+                    queryTerm+=" "+args[j+1];
+                    j++;
+                }
             }
             if (args[i].equals("--cache")){
                 cache=args[i+1];
             }
         }
         File folder = new File(cache);
-        if(search!="author"&&search!="publication"&&search!="venue"){
+        if(!search.equals("author")&&!search.equals("publication")&&!search.equals("venue")){
             System.out.println("Invalid search type!");
         }
         if (!folder.isDirectory()){
             System.out.println("Invalid cache location!");
         }
-        else if (search.equals("author")){
-            query.authorSearch(queryTerm);
-        }
-        else if (search.equals("venue")){
-            query.venueSearch(queryTerm);
+        else{
+            if (search.equals("author")){
+                query.authorSearch(queryTerm);
+            }
+            else if (search.equals("venue")){
+                query.venueSearch(queryTerm, folder);
+            }
+            else if (search.equals("publication")){
+                query.publicationSearch(queryTerm);
+            }
         }
 
     }

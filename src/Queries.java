@@ -2,14 +2,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.net.URLEncoder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class Queries {
 
-    public void venueSearch(String query){
+    public void venueSearch(String query, File folder){
         try{
             String[] queryTerms = query.split(" ");
             String urlString = "http://dblp.org/search/venue/api?q="+queryTerms[0];
@@ -18,13 +26,24 @@ public class Queries {
             }
             urlString+="&format=xml&h=40&c=0";
             URL url = new URL(urlString);
+
+            String encodedURL = URLEncoder.encode(urlString,"UTF-8");
+            Document doc;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(url.openStream());
+
+            if (isCached(urlString,folder)==null){
+                doc = db.parse(url.openStream());
+                writeFile(doc, folder, encodedURL);
+            }
+            else{
+                doc=db.parse(isCached(urlString,folder));
+            }
             NodeList venues = doc.getElementsByTagName("venue");
             for(int i = 0; i<venues.getLength(); i++){
                 System.out.println(venues.item(i).getTextContent());
             }
+
         }
         catch(Exception e){
             e.printStackTrace();
@@ -65,6 +84,8 @@ public class Queries {
             }
             urlString+="&format=xml&h=40&c=0";
             URL url = new URL(urlString);
+
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(url.openStream());
@@ -98,6 +119,31 @@ public class Queries {
         catch(Exception e){
             e.printStackTrace();
 
+        }
+    }
+
+    private File isCached (String encodedUrl, File cacheFolder){
+        File[] files = cacheFolder.listFiles();
+        File cachedFile = null;
+        for (File file: files
+             ) {
+            if(file.getName().equals(encodedUrl)){
+                cachedFile=file;
+            }
+        }
+        return cachedFile;
+    }
+
+    private void writeFile(Document doc, File folder, String fileName){
+        try{
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(folder.getAbsolutePath()+fileName));
+            transformer.transform(source, result);
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 }
