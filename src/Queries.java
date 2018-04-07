@@ -89,8 +89,6 @@ public class Queries {
                 Document doc1 = db1.parse(authorURL.openStream());
                 NodeList coauthorsNodes = doc1.getElementsByTagName("co");
                 NodeList publicationsNodes = doc1.getElementsByTagName("r");
-
-                //name = info.item(i).getChildNodes().item(0).getTextContent();
                 publications = Integer.toString(publicationsNodes.getLength());
                 coauthors = Integer.toString(coauthorsNodes.getLength());
 
