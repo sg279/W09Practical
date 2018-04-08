@@ -32,12 +32,12 @@ public class Queries {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            if (isCached(urlString,folder)==null){
+            if (isCached(encodedURL,folder)==null){
                 doc = db.parse(url.openStream());
                 writeFile(doc, folder, encodedURL);
             }
             else{
-                doc=db.parse(isCached(urlString,folder));
+                doc=db.parse(isCached(encodedURL,folder));
             }
             NodeList venues = doc.getElementsByTagName("venue");
             for(int i = 0; i<venues.getLength(); i++){
@@ -51,7 +51,7 @@ public class Queries {
         }
     }
 
-    public void publicationSearch(String query){
+    public void publicationSearch(String query, File folder){
         try{
             String[] queryTerms = query.split(" ");
             String urlString = "http://dblp.org/search/publ/api?q="+queryTerms[0];
@@ -60,9 +60,18 @@ public class Queries {
             }
             urlString+="&format=xml&h=40&c=0";
             URL url = new URL(urlString);
+            String encodedURL = URLEncoder.encode(urlString,"UTF-8");
+            Document doc;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(url.openStream());
+
+            if (isCached(encodedURL,folder)==null){
+                doc = db.parse(url.openStream());
+                writeFile(doc, folder, encodedURL);
+            }
+            else{
+                doc=db.parse(isCached(encodedURL,folder));
+            }
             NodeList authors = doc.getElementsByTagName("authors");
             NodeList titles = doc.getElementsByTagName("title");
             for(int i = 0; i<titles.getLength(); i++){
@@ -75,7 +84,7 @@ public class Queries {
         }
     }
 
-    public void authorSearch(String query){
+    public void authorSearch(String query,File folder){
         try{
             String[] queryTerms = query.split(" ");
             String urlString = "http://dblp.org/search/author/api?q="+queryTerms[0];
@@ -84,11 +93,18 @@ public class Queries {
             }
             urlString+="&format=xml&h=40&c=0";
             URL url = new URL(urlString);
-
-
+            String encodedURL = URLEncoder.encode(urlString,"UTF-8");
+            Document doc;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(url.openStream());
+
+            if (isCached(encodedURL,folder)==null){
+                doc = db.parse(url.openStream());
+                writeFile(doc, folder, encodedURL);
+            }
+            else{
+                doc=db.parse(isCached(encodedURL,folder));
+            }
             NodeList info = doc.getElementsByTagName("info");
             for(int i = 0; i<info.getLength(); i++){
                 NodeList children = info.item(i).getChildNodes();
@@ -127,7 +143,8 @@ public class Queries {
         File cachedFile = null;
         for (File file: files
              ) {
-            if(file.getName().equals(encodedUrl)){
+            String n = file.getName();
+            if(n.equals(encodedUrl)){
                 cachedFile=file;
             }
         }
@@ -139,7 +156,7 @@ public class Queries {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(folder.getAbsolutePath()+fileName));
+            StreamResult result = new StreamResult(new File(folder.getAbsolutePath()+"\\"+fileName));
             transformer.transform(source, result);
         }
         catch(Exception e){

@@ -42,13 +42,13 @@ public class W09Practical {
         }
         else{
             if (search.equals("author")){
-                query.authorSearch(queryTerm);
+                query.authorSearch(queryTerm, folder);
             }
             else if (search.equals("venue")){
                 query.venueSearch(queryTerm, folder);
             }
             else if (search.equals("publication")){
-                query.publicationSearch(queryTerm);
+                query.publicationSearch(queryTerm, folder);
             }
         }
 
