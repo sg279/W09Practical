@@ -33,11 +33,20 @@ public class W09Practical {
             }
         }
         File folder = new File(cache);
-        if(!search.equals("author")&&!search.equals("publication")&&!search.equals("venue")){
-            System.out.println("Invalid search type!");
+        if(!queryTerm.equals(null)){
+            System.out.println("Missing value for --query\n" +
+                    "Malformed command line arguments.");
+        }
+        if(!search.equals(null)){
+            System.out.println("Missing value for --search\n" +
+                    "Malformed command line arguments.");
+        }
+        else if(!search.equals("author")&&!search.equals("publication")&&!search.equals("venue")){
+            System.out.println("Invalid value for --search: "+search);
+            System.out.println("Malformed command line arguments.");
         }
         if (!folder.isDirectory()){
-            System.out.println("Invalid cache location!");
+            System.out.println("Cache directory doesn't exist: "+queryTerm);
         }
         else{
             if (search.equals("author")){
