@@ -15,7 +15,6 @@ public class W09Practical {
         String search="";
         String queryTerm="";
         String cache="";
-        File[] listOfFiles;
 
         for(int i =0; i<args.length; i++){
             if (args[i].equals("--search")){
@@ -24,7 +23,7 @@ public class W09Practical {
             if (args[i].equals("--query")){
                 queryTerm = args[i+1];
                 int j=i+1;
-                while (j<args.length-1&&args[j]!="--search"&&args[j]!="--cache"){
+                while (j<args.length-1&&!args[j+1].equals("--search")&&!args[j+1].equals("--cache")){
                     queryTerm+=" "+args[j+1];
                     j++;
                 }

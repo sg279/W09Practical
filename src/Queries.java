@@ -72,10 +72,25 @@ public class Queries {
             else{
                 doc=db.parse(isCached(encodedURL,folder));
             }
-            NodeList authors = doc.getElementsByTagName("authors");
+
             NodeList titles = doc.getElementsByTagName("title");
+            NodeList info = doc.getElementsByTagName("info");
+            ArrayList<String> numberOfAuthors= new ArrayList<>();
+
+            for (int i = 0; i<info.getLength(); i++){
+                if(info.item(i) instanceof Element){
+                    NodeList authors = ((Element) info.item(i)).getElementsByTagName("author");
+                    if(authors.getLength()==0){
+                        numberOfAuthors.add("0");
+                    }
+                    else{
+                        numberOfAuthors.add(Integer.toString(authors.getLength()));
+                    }
+                }
+            }
+
             for(int i = 0; i<titles.getLength(); i++){
-                System.out.println(titles.item(i).getTextContent()+", "+authors.item(i).getChildNodes().getLength()+" authors");
+                System.out.println(titles.item(i).getTextContent()+" (number of authors: "+numberOfAuthors.get(i)+")");
             }
         }
         catch(Exception e){
@@ -128,8 +143,7 @@ public class Queries {
                 NodeList publicationsNodes = doc1.getElementsByTagName("r");
                 publications = Integer.toString(publicationsNodes.getLength());
                 coauthors = Integer.toString(coauthorsNodes.getLength());
-
-                System.out.println(name+" "+publications+" publications, "+coauthors+" coauthors");
+                System.out.println(name+" - "+publications+" publications with "+coauthors+" co-authors");
             }
         }
         catch(Exception e){
