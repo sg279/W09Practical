@@ -12,8 +12,16 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * This class contains all of the queries that the user may call as well as methods that are used by them
+ */
 public class Queries {
 
+    /**
+     *
+     * @param query
+     * @param folder
+     */
     public void venueSearch(String query, File folder) {
         try {
             String[] queryTerms = query.split(" ");
