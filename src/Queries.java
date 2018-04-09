@@ -1,9 +1,6 @@
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.net.URLEncoder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,125 +14,131 @@ import java.util.ArrayList;
 
 public class Queries {
 
-    public void venueSearch(String query, File folder){
-        try{
+    public void venueSearch(String query, File folder) {
+        try {
             String[] queryTerms = query.split(" ");
-            String urlString = "http://dblp.org/search/venue/api?q="+queryTerms[0];
-            for (int i = 1; i<queryTerms.length; i++){
-                urlString+="+"+queryTerms[i];
+            String urlString = "http://dblp.org/search/venue/api?q=" + queryTerms[0];
+            for (int i = 1; i < queryTerms.length; i++) {
+                urlString += "+" + queryTerms[i];
             }
-            urlString+="&format=xml&h=40&c=0";
+            urlString += "&format=xml&h=40&c=0";
             URL url = new URL(urlString);
 
-            String encodedURL = URLEncoder.encode(urlString,"UTF-8");
+            String encodedURL = URLEncoder.encode(urlString, "UTF-8");
             Document doc;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            if (isCached(encodedURL,folder)==null){
+            File cachedQuery = isCached(encodedURL, folder);
+
+            if (cachedQuery == null) {
                 doc = db.parse(url.openStream());
                 writeFile(doc, folder, encodedURL);
             }
-            else{
-                doc=db.parse(isCached(encodedURL,folder));
+            else {
+                doc = db.parse(cachedQuery);
             }
             NodeList venues = doc.getElementsByTagName("venue");
-            for(int i = 0; i<venues.getLength(); i++){
+            for (int i = 0; i < venues.getLength(); i++) {
                 System.out.println(venues.item(i).getTextContent());
             }
 
         }
-        catch(Exception e){
+        catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    public void publicationSearch(String query, File folder){
-        try{
+    public void publicationSearch(String query, File folder) {
+        try {
             String[] queryTerms = query.split(" ");
-            String urlString = "http://dblp.org/search/publ/api?q="+queryTerms[0];
-            for (int i = 1; i<queryTerms.length; i++){
-                urlString+="+"+queryTerms[i];
+            String urlString = "http://dblp.org/search/publ/api?q=" + queryTerms[0];
+            for (int i = 1; i < queryTerms.length; i++) {
+                urlString += "+" + queryTerms[i];
             }
-            urlString+="&format=xml&h=40&c=0";
+            urlString += "&format=xml&h=40&c=0";
             URL url = new URL(urlString);
-            String encodedURL = URLEncoder.encode(urlString,"UTF-8");
+            String encodedURL = URLEncoder.encode(urlString, "UTF-8");
             Document doc;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            if (isCached(encodedURL,folder)==null){
+            File cachedQuery = isCached(encodedURL, folder);
+
+            if (cachedQuery == null) {
                 doc = db.parse(url.openStream());
                 writeFile(doc, folder, encodedURL);
             }
-            else{
-                doc=db.parse(isCached(encodedURL,folder));
+            else {
+                doc = db.parse(cachedQuery);
             }
 
             NodeList titles = doc.getElementsByTagName("title");
             NodeList info = doc.getElementsByTagName("info");
-            ArrayList<String> numberOfAuthors= new ArrayList<>();
+            ArrayList<String> numberOfAuthors = new ArrayList<>();
 
-            for (int i = 0; i<info.getLength(); i++){
-                if(info.item(i) instanceof Element){
+            for (int i = 0; i < info.getLength(); i++) {
+                if (info.item(i) instanceof Element) {
                     NodeList authors = ((Element) info.item(i)).getElementsByTagName("author");
-                    if(authors.getLength()==0){
+                    if (authors.getLength() == 0) {
                         numberOfAuthors.add("0");
                     }
-                    else{
+                    else {
                         numberOfAuthors.add(Integer.toString(authors.getLength()));
                     }
                 }
             }
 
-            for(int i = 0; i<titles.getLength(); i++){
-                System.out.println(titles.item(i).getTextContent()+" (number of authors: "+numberOfAuthors.get(i)+")");
+            for (int i = 0; i < titles.getLength(); i++) {
+                System.out.println(titles.item(i).getTextContent() + " (number of authors: " + numberOfAuthors.get(i) + ")");
             }
         }
-        catch(Exception e){
+        catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    public void authorSearch(String query,File folder){
-        try{
+    public void authorSearch(String query, File folder) {
+        try {
             String[] queryTerms = query.split(" ");
-            String urlString = "http://dblp.org/search/author/api?q="+queryTerms[0];
-            for (int i = 1; i<queryTerms.length; i++){
-                urlString+="+"+queryTerms[i];
+            String urlString = "http://dblp.org/search/author/api?q=" + queryTerms[0];
+            for (int i = 1; i < queryTerms.length; i++) {
+                urlString += "+" + queryTerms[i];
             }
-            urlString+="&format=xml&h=40&c=0";
+            urlString += "&format=xml&h=40&c=0";
             URL url = new URL(urlString);
-            String encodedURL = URLEncoder.encode(urlString,"UTF-8");
+            String encodedURL = URLEncoder.encode(urlString, "UTF-8");
             Document doc;
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            if (isCached(encodedURL,folder)==null){
+            File cachedQuery = isCached(encodedURL, folder);
+
+            if (cachedQuery == null) {
                 doc = db.parse(url.openStream());
                 writeFile(doc, folder, encodedURL);
             }
-            else{
-                doc=db.parse(isCached(encodedURL,folder));
+            else {
+                doc = db.parse(cachedQuery);
             }
             NodeList info = doc.getElementsByTagName("info");
-            for(int i = 0; i<info.getLength(); i++){
+            for (int i = 0; i < info.getLength(); i++) {
                 NodeList children = info.item(i).getChildNodes();
-                String name="";
+                String name = "";
                 String publications;
                 String coauthors;
-                String authorURLString="";
-                for(int j = 0; j<children.getLength(); j++){
-                    if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("author")){
-                        name=children.item(j).getTextContent();
+                String authorURLString = "";
+                for (int j = 0; j < children.getLength(); j++) {
+                    if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("author")) {
+                        name = children.item(j).getTextContent();
                     }
-                    if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("url")){
-                        authorURLString=children.item(j).getTextContent();
+                    if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("url")) {
+                        authorURLString = children.item(j).getTextContent();
                     }
                 }
-                URL authorURL = new URL(authorURLString+".xml");
+                URL authorURL = new URL(authorURLString + ".xml");
                 DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db1 = dbf1.newDocumentBuilder();
                 Document doc1 = db1.parse(authorURL.openStream());
@@ -143,37 +146,37 @@ public class Queries {
                 NodeList publicationsNodes = doc1.getElementsByTagName("r");
                 publications = Integer.toString(publicationsNodes.getLength());
                 coauthors = Integer.toString(coauthorsNodes.getLength());
-                System.out.println(name+" - "+publications+" publications with "+coauthors+" co-authors");
+                System.out.println(name + " - " + publications + " publications with " + coauthors + " co-authors.");
             }
         }
-        catch(Exception e){
+        catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    private File isCached (String encodedUrl, File cacheFolder){
+    private File isCached(String encodedUrl, File cacheFolder) {
         File[] files = cacheFolder.listFiles();
         File cachedFile = null;
         for (File file: files
              ) {
             String n = file.getName();
-            if(n.equals(encodedUrl)){
-                cachedFile=file;
+            if (n.equals(encodedUrl)) {
+                cachedFile = file;
             }
         }
         return cachedFile;
     }
 
-    private void writeFile(Document doc, File folder, String fileName){
-        try{
+    private void writeFile(Document doc, File folder, String fileName) {
+        try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(folder.getAbsolutePath()+"\\"+fileName));
+            StreamResult result = new StreamResult(new File(folder.getAbsolutePath() + "/" + fileName));
             transformer.transform(source, result);
         }
-        catch(Exception e){
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
