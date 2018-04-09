@@ -7,37 +7,60 @@ import java.net.URL;
 public class W09Practical {
 
     public static void main (String[] args){
+        //Instantiate a new instance of the Queries class called query
         Queries query = new Queries();
-        //query.venueSearch("international school");
-        //query.publicationSearch("computers");
-        //query.authorSearch("John");
-
+        //Instantiate empty strings called search, queryTerm, and cache
         String search="";
         String queryTerm="";
         String cache="";
 
+        //For each item in the arguments array
         for(int i =0; i<args.length; i++){
+            //If the item is --search, set the search string to the next argument
             if (args[i].equals("--search")){
-                search=args[i+1];
-            }
-            if (args[i].equals("--query")){
-                queryTerm = args[i+1];
-                int j=i+1;
-                while (j<args.length-1&&!args[j+1].equals("--search")&&!args[j+1].equals("--cache")){
-                    queryTerm+=" "+args[j+1];
-                    j++;
+                if(i==args.length){
+                    search=null;
+                }
+                else{
+                    search=args[i+1];
                 }
             }
+            //If the item is --query run the following
+            if (args[i].equals("--query")){
+                if(i==args.length){
+                    queryTerm=null;
+                }
+                else{
+                    //Add the next item to the query string
+                    queryTerm = args[i+1];
+                    //Instantiate an integer called j as i+1
+                    int j=i+1;
+                    //While j is less than the number of arguments -1, and the argument
+                    //after j isn't --search or --cache, add the j+1 argument to the queryTerm string
+                    while (j<args.length-1&&!args[j+1].equals("--search")&&!args[j+1].equals("--cache")){
+                        queryTerm+=" "+args[j+1];
+                        j++;
+                    }
+                }
+            }
+            //If the item is --cache, set the cache string to the next item
             if (args[i].equals("--cache")){
-                cache=args[i+1];
+                if(i==args.length){
+                    cache=null;
+                }
+                else{
+                    cache=args[i+1];
+                }
             }
         }
+        //Create a new file object from the cache
         File folder = new File(cache);
-        if(!queryTerm.equals(null)){
+
+        if(queryTerm.equals(null)||queryTerm.equals("--cache")||queryTerm.equals("--search")){
             System.out.println("Missing value for --query\n" +
                     "Malformed command line arguments.");
         }
-        if(!search.equals(null)){
+        if(search.equals("--cache")||search.equals("--query")||search.equals(null)){
             System.out.println("Missing value for --search\n" +
                     "Malformed command line arguments.");
         }
@@ -46,7 +69,7 @@ public class W09Practical {
             System.out.println("Malformed command line arguments.");
         }
         if (!folder.isDirectory()){
-            System.out.println("Cache directory doesn't exist: "+queryTerm);
+            System.out.println("Cache directory doesn't exist: "+cache);
         }
         else{
             if (search.equals("author")){
