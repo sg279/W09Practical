@@ -193,53 +193,93 @@ public class Queries {
                 String coauthors;
                 //Instantiate an empty string called authorURLString
                 String authorURLString = "";
-                //For each item 
+                //For each item in the children node list, do the following
                 for (int j = 0; j < children.getLength(); j++) {
+                    //If the item is an instance of an element object (allowing for Element methods to be used) and has the
+                    //tag author, set the name string to the text content of the item
                     if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("author")) {
                         name = children.item(j).getTextContent();
                     }
+                    //If the item is an instance of an element object (allowing for Element methods to be used) and has the
+                    //tag url, set the authorURLString string to the text content of the item
                     if (children.item(j) instanceof Element && ((Element) children.item(j)).getTagName().equals("url")) {
                         authorURLString = children.item(j).getTextContent();
                     }
                 }
+                //Create a new URL object out of the authorURL string with .xml added to it
                 URL authorURL = new URL(authorURLString + ".xml");
+                //Create a new instance of the DocumentBuilderFactory object called dbf1
                 DocumentBuilderFactory dbf1 = DocumentBuilderFactory.newInstance();
+                //Create a new DocumentBuilder object using the dbf1 factory
                 DocumentBuilder db1 = dbf1.newDocumentBuilder();
+                //Create a new Document object called doc1 by parsing an opened URL stream (from the authorURL) to the document builder
                 Document doc1 = db1.parse(authorURL.openStream());
+                //Create node lists called coauthorsNodes and publicationNodes, containing all nodes in the document with the tags co and r respectively
                 NodeList coauthorsNodes = doc1.getElementsByTagName("co");
                 NodeList publicationsNodes = doc1.getElementsByTagName("r");
+                //Set the publications string to the length of the publicationsNodes node list parsed to a string
                 publications = Integer.toString(publicationsNodes.getLength());
+                //Set the coauthors string to the length of the coauthorsNodes node list parsed to a string
                 coauthors = Integer.toString(coauthorsNodes.getLength());
+                //Print the author's name, number of publications, and number of co-authors
                 System.out.println(name + " - " + publications + " publications with " + coauthors + " co-authors.");
             }
         }
+        //If an exception is thrown print the stack trace
         catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 
-    private File isCached(String encodedUrl, File cacheFolder) {
+    /**
+     * This method checks if a a URL has been queried previously, and if it has, returns the results
+     * of the query without needing to call the API and make a URL connection, otherwise a null file is returned
+     *
+     * @param encodedURL The query URL encoded with UTF-8 encoding
+     * @param cacheFolder The location of the cache folder
+     * @return The cached file if it exists, if not the return value is a null file
+     */
+    private File isCached(String encodedURL, File cacheFolder) {
+        //Create a list of File objects called files from all files in the cache folder
         File[] files = cacheFolder.listFiles();
+        //Instantiate a File called cachedFile as null
         File cachedFile = null;
+        //For each file in the files list do the following
         for (File file: files
              ) {
-            String n = file.getName();
-            if (n.equals(encodedUrl)) {
+            //Instantiate a string called name as the name of the file
+            String name = file.getName();
+            //If the name string is the same as the encodedUrl, set the cachedFile to the file
+            if (name.equals(encodedURL)) {
                 cachedFile = file;
             }
         }
+        //Return the cachedFile file
         return cachedFile;
     }
 
+    /**
+     * This method writes an XML file to a parsed directory from the contents of a parsed Document object
+     *
+     * @param doc The document to be written as an XML file
+     * @param folder The directory the file will be written to
+     * @param fileName The name of the file
+     */
     private void writeFile(Document doc, File folder, String fileName) {
+        //Try the following
         try {
+            //Create new instances of TransformerFactory and Transformer objects (using the factory)
+            //called transformerFactory and transformer respectively
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            //Create a new DOMSource object called source from the document parameter
             DOMSource source = new DOMSource(doc);
+            //Create a new StreamResult object called result from the directory's path joined with a / and the fileName parameter
             StreamResult result = new StreamResult(new File(folder.getAbsolutePath() + "/" + fileName));
+            //Call the Transformer object's transform method using the source DOMSource and result StreamResult objects as parameters
             transformer.transform(source, result);
         }
+        //If an exception is thrown print the stack trace
         catch (Exception e) {
             e.printStackTrace();
         }
