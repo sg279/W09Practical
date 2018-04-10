@@ -38,8 +38,8 @@ public class W09Practical {
                     //Instantiate an integer called j as i+1
                     int j = i + 1;
                     //While j is less than the number of arguments -1, and the argument
-                    //after j isn't --search or --cache, add the j+1 argument to the queryTerm string
-                    while (j < args.length - 1 && !args[j + 1].equals("--search") && !args[j + 1].equals("--cache")) {
+                    //after j isn't --search or --cache and queryTerm isn't --search or --cache, add the j+1 argument to the queryTerm string
+                    while (j < args.length - 1 && !args[j + 1].equals("--search") && !args[j + 1].equals("--cache") && !queryTerm.equals("--search") && !queryTerm.equals("--cache")) {
                         queryTerm += " " + args[j + 1];
                         j++;
                     }

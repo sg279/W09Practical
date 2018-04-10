@@ -230,7 +230,7 @@ public class Queries {
             //Create a new DOMSource object called source from the document parameter
             DOMSource source = new DOMSource(doc);
             //Create a new StreamResult object called result from the directory's path joined with a / and the fileName parameter
-            StreamResult result = new StreamResult(new File(folder.getAbsolutePath() + "/" + fileName));
+            StreamResult result = new StreamResult(new File(folder.getAbsolutePath() + "\\" + fileName));
             //Call the Transformer object's transform method using the source DOMSource and result StreamResult objects as parameters
             transformer.transform(source, result);
         }
