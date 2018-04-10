@@ -39,23 +39,8 @@ public class Queries {
             URL url = new URL(urlString);
             //Instantiate a string called encodedURL from the urlString object and the java URLEncoder class's encode method, with UTF-8 encoding
             String encodedURL = URLEncoder.encode(urlString, "UTF-8");
-            //Create a new Document object called doc, a new instance of a DocumentBuilderFactory object, and a new DocumentBuilder using the factory
-            Document doc;
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            //Create a new File object from the isCached method using the encodedURL string and folder as parameters
-            File cachedQuery = isCached(encodedURL, folder);
-            //If the cachedQuery file is null (because there is no cached file for that query), run the following
-            if (cachedQuery == null) {
-                //Create the contents of the doc variable by parsing an opened URL stream (from the url variable) to the document builder
-                doc = db.parse(url.openStream());
-                //Call the writeFile method with the doc, folder, and encodedURL as parameters
-                writeFile(doc, folder, encodedURL);
-            }
-            //If not, set the contents of the doc to the cachedQuery file parsed to the document builder
-            else {
-                doc = db.parse(cachedQuery);
-            }
+            //Create a new Document object called doc from the docBuilder method parsing url, encodedURL, and folder as parameters
+            Document doc = docBuilder(url, encodedURL, folder);
             //Create a node list called venues of all nodes in the document with the tag venue
             NodeList venues = doc.getElementsByTagName("venue");
             //For each item in the node list, print the text content of the tags
@@ -92,23 +77,8 @@ public class Queries {
             URL url = new URL(urlString);
             //Instantiate a string called encodedURL from the urlString object and the java URLEncoder class's encode method, with UTF-8 encoding
             String encodedURL = URLEncoder.encode(urlString, "UTF-8");
-            //Create a new Document object called doc, a new instance of a DocumentBuilderFactory object, and a new DocumentBuilder using the factory
-            Document doc;
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            //Create a new File object from the isCached method using the encodedURL string and folder as parameters
-            File cachedQuery = isCached(encodedURL, folder);
-            //If the cachedQuery file is null (because there is no cached file for that query), run the following
-            if (cachedQuery == null) {
-                //Create the contents of the doc variable by parsing an opened URL stream (from the url variable) to the document builder
-                doc = db.parse(url.openStream());
-                //Call the writeFile method with the doc, folder, and encodedURL as parameters
-                writeFile(doc, folder, encodedURL);
-            }
-            //If not, set the contents of the doc to the cachedQuery file parsed to the document builder
-            else {
-                doc = db.parse(cachedQuery);
-            }
+            //Create a new Document object called doc from the docBuilder method parsing url, encodedURL, and folder as parameters
+            Document doc = docBuilder(url, encodedURL, folder);
             //Create node lists called titles and info, containing all nodes in the document with the tags title and info respectively
             NodeList titles = doc.getElementsByTagName("title");
             NodeList info = doc.getElementsByTagName("info");
@@ -163,23 +133,8 @@ public class Queries {
             URL url = new URL(urlString);
             //Instantiate a string called encodedURL from the urlString object and the java URLEncoder class's encode method, with UTF-8 encoding
             String encodedURL = URLEncoder.encode(urlString, "UTF-8");
-            //Create a new Document object called doc, a new instance of a DocumentBuilderFactory object, and a new DocumentBuilder using the factory
-            Document doc;
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            //Create a new File object from the isCached method using the encodedURL string and folder as parameters
-            File cachedQuery = isCached(encodedURL, folder);
-            //If the cachedQuery file is null (because there is no cached file for that query), run the following
-            if (cachedQuery == null) {
-                //Create the contents of the doc variable by parsing an opened URL stream (from the url variable) to the document builder
-                doc = db.parse(url.openStream());
-                //Call the writeFile method with the doc, folder, and encodedURL as parameters
-                writeFile(doc, folder, encodedURL);
-            }
-            //If not, set the contents of the doc to the cachedQuery file parsed to the document builder
-            else {
-                doc = db.parse(cachedQuery);
-            }
+            //Create a new Document object called doc from the docBuilder method parsing url, encodedURL, and folder as parameters
+            Document doc = docBuilder(url, encodedURL, folder);
             //Create a node list called venues of all nodes in the document with the tag info
             NodeList info = doc.getElementsByTagName("info");
             //For each item in the info list do the following
@@ -283,5 +238,43 @@ public class Queries {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * This method builds the document containing the XML nodes that are used by the query methods
+     *
+     * @param url The URL of the XML file to be used
+     * @param encodedURL The URL of the XML file encoded as a string to check it exists in the cache
+     * @param folder The cache directory
+     * @return The Document object created from either the cached XML file or the URL of the XML file
+     */
+    private Document docBuilder(URL url, String encodedURL, File folder){
+        //Create a new Document object called doc
+        Document doc = null;
+        //Try the following
+        try {
+            //Create a new instance of a DocumentBuilderFactory object and a new DocumentBuilder using the factory
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            //Create a new File object from the isCached method using the encodedURL string and folder as parameters
+            File cachedQuery = isCached(encodedURL, folder);
+            //If the cachedQuery file is null (because there is no cached file for that query), run the following
+            if (cachedQuery == null) {
+                //Create the contents of the doc variable by parsing an opened URL stream (from the url variable) to the document builder
+                doc = db.parse(url.openStream());
+                //Call the writeFile method with the doc, folder, and encodedURL as parameters
+                writeFile(doc, folder, encodedURL);
+            }
+            //If not, set the contents of the doc to the cachedQuery file parsed to the document builder
+            else {
+                doc = db.parse(cachedQuery);
+            }
+        }
+        //If an exception is thrown, print the stack trace
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Return the doc Document
+        return doc;
     }
 }
