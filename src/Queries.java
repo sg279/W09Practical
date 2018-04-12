@@ -13,12 +13,12 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * This class contains all of the queries that the user may call as well as methods that are used by them
+ * This class contains all of the queries that the user may call as well as methods that are used by them.
  */
 public class Queries {
 
     /**
-     *This method prints out all of the venues that are returned from the query
+     *This method prints out all of the venues that are returned from the query.
      *
      * @param query The term to search for
      * @param folder The cache location
@@ -56,7 +56,7 @@ public class Queries {
     }
 
     /**
-     * This method prints out the names of all publications that are returned from the query along with how many authors worked on it
+     * This method prints out the names of all publications that are returned from the query along with how many authors worked on it.
      *
      * @param query The term to search for
      * @param folder The cache location
@@ -112,7 +112,7 @@ public class Queries {
     }
 
     /**
-     * This method prints out the name of every author returned from the query along with the number of publications and co authors they have
+     * This method prints out the name of every author returned from the query along with the number of publications and co authors they have.
      *
      * @param query The term to search for
      * @param folder The cache location
@@ -188,7 +188,7 @@ public class Queries {
 
     /**
      * This method checks if a a URL has been queried previously, and if it has, returns the results
-     * of the query without needing to call the API and make a URL connection, otherwise a null file is returned
+     * of the query without needing to call the API and make a URL connection, otherwise a null file is returned.
      *
      * @param encodedURL The query URL encoded with UTF-8 encoding
      * @param cacheFolder The location of the cache folder
@@ -214,7 +214,7 @@ public class Queries {
     }
 
     /**
-     * This method writes an XML file to a parsed directory from the contents of a parsed Document object
+     * This method writes an XML file to a parsed directory from the contents of a parsed Document object.
      *
      * @param doc The document to be written as an XML file
      * @param folder The directory the file will be written to
@@ -241,14 +241,14 @@ public class Queries {
     }
 
     /**
-     * This method builds the document containing the XML nodes that are used by the query methods
+     * This method builds the document containing the XML nodes that are used by the query methods.
      *
      * @param url The URL of the XML file to be used
      * @param encodedURL The URL of the XML file encoded as a string to check it exists in the cache
      * @param folder The cache directory
      * @return The Document object created from either the cached XML file or the URL of the XML file
      */
-    private Document docBuilder(URL url, String encodedURL, File folder){
+    private Document docBuilder(URL url, String encodedURL, File folder) {
         //Create a new Document object called doc
         Document doc = null;
         //Try the following

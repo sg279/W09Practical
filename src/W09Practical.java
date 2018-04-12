@@ -1,10 +1,15 @@
 import java.io.File;
 
 /**
- * This class contains the code to interpret the user's command line arguments and call the appropriate query or handle the appropriate error
+ * This class contains the code to interpret the user's command line arguments and call the appropriate query or handle the appropriate error.
  */
 public class W09Practical {
 
+    /**
+     * This is the main method. It contains code for error handling and interpret the user's arguments.
+     *
+     * @param args The user's command line arguments
+     */
     public static void main(String[] args) {
         //Instantiate a new instance of the Queries class called query
         Queries query = new Queries();
