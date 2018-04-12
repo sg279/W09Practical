@@ -29,13 +29,12 @@ public class Queries {
             //Instantiate an array list of strings as the query term split by spaces
             String[] queryTerms = query.split(" ");
             //Instantiate a string called urlString as the start of the url and the first item in the queryTerms array
-            String urlString = "http://dblp.org/search/venue/api?q=" + queryTerms[0];
+            String urlString = "http://dblp.org/search/venue/api?format=xml&c=0&h=40&q=" + queryTerms[0];
             //For each item in the query array after the first, add a + and the item to the end of the url string
             for (int i = 1; i < queryTerms.length; i++) {
                 urlString += "+" + queryTerms[i];
             }
-            //Add the rest of the required formatting to the urlString and parse it to a URL object called url
-            urlString += "&format=xml&h=40&c=0";
+            //Parse the urlString to a URL object called url
             URL url = new URL(urlString);
             //Instantiate a string called encodedURL from the urlString object and the java URLEncoder class's encode method, with UTF-8 encoding
             String encodedURL = URLEncoder.encode(urlString, "UTF-8");
@@ -67,13 +66,12 @@ public class Queries {
             //Instantiate an array list of strings as the query term split by spaces
             String[] queryTerms = query.split(" ");
             //Instantiate a string called urlString as the start of the url and the first item in the queryTerms array
-            String urlString = "http://dblp.org/search/publ/api?q=" + queryTerms[0];
+            String urlString = "http://dblp.org/search/publ/api?format=xml&c=0&h=40&q=" + queryTerms[0];
             //For each item in the query array after the first, add a + and the item to the end of the url string
             for (int i = 1; i < queryTerms.length; i++) {
                 urlString += "+" + queryTerms[i];
             }
-            //Add the rest of the required formatting to the urlString and parse it to a URL object called url
-            urlString += "&format=xml&h=40&c=0";
+            //Parse the urlString to a URL object called url
             URL url = new URL(urlString);
             //Instantiate a string called encodedURL from the urlString object and the java URLEncoder class's encode method, with UTF-8 encoding
             String encodedURL = URLEncoder.encode(urlString, "UTF-8");
@@ -123,13 +121,12 @@ public class Queries {
             //Instantiate an array list of strings as the query term split by spaces
             String[] queryTerms = query.split(" ");
             //Instantiate a string called urlString as the start of the url and the first item in the queryTerms array
-            String urlString = "http://dblp.org/search/author/api?q=" + queryTerms[0];
+            String urlString = "http://dblp.org/search/author/api?format=xml&c=0&h=40&q=" + queryTerms[0];
             //For each item in the query array after the first, add a + and the item to the end of the url string
             for (int i = 1; i < queryTerms.length; i++) {
                 urlString += "+" + queryTerms[i];
             }
-            //Add the rest of the required formatting to the urlString and parse it to a URL object called url
-            urlString += "&format=xml&h=40&c=0";
+            //Parse the urlString to a URL object called url
             URL url = new URL(urlString);
             //Instantiate a string called encodedURL from the urlString object and the java URLEncoder class's encode method, with UTF-8 encoding
             String encodedURL = URLEncoder.encode(urlString, "UTF-8");
